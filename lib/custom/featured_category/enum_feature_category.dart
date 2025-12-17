@@ -25,6 +25,6 @@ enum CategoryAppStyle {
     for (final s in values) {
       if (s.valueString == (v ?? '').trim()) return s;
     }
-    return CategoryAppStyle.vertical; // default
+    return CategoryAppStyle.horizontal; // default
   }
 }

@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>توريده</string>
+		<string>توريده جمله</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -65,7 +65,7 @@
 		<key>FacebookClientToken</key>
 		<string></string>
 		<key>FacebookDisplayName</key>
-		<string>توريده</string>
+		<string>توريده جمله</string>
 		<key>LSApplicationCategoryType</key>
 		<string></string>
 		<key>LSApplicationQueriesSchemes</key>
