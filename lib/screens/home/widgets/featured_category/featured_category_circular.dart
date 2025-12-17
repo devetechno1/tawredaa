@@ -1,16 +1,15 @@
 import 'dart:collection';
 
 import 'package:active_ecommerce_cms_demo_app/app_config.dart';
-import 'package:active_ecommerce_cms_demo_app/custom/featured_category/feature_categories_widget_horizontal.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_cms_demo_app/locale/custom_localization.dart';
 import 'package:provider/provider.dart';
-
+import '../../../../custom/featured_category/featured_category_horizontal_circular.dart';
 import '../../../../data_model/category_response.dart';
 import '../../../../presenter/home_provider.dart';
 
-class CategoryListHorizontal extends StatelessWidget {
-  const CategoryListHorizontal({super.key});
+class CategoryListCircular extends StatelessWidget {
+  const CategoryListCircular({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class CategoryListHorizontal extends StatelessWidget {
                 ),
               ),
             ),
-            const Expanded(child: FeaturedCategoriesWidget(
+            const Expanded(child: FeaturedCategoryCircular(
             )),
           ],
         ),

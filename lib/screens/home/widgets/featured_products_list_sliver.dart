@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../app_config.dart';
 import '../../../data_model/product_mini_response.dart';
 import '../../../presenter/home_provider.dart';
+import '../../product/featured_products.dart';
 import 'featured_products/custom_horizontal_products_list_widget.dart';
 
 class FeaturedProductsListSliver extends StatelessWidget {
@@ -32,6 +33,14 @@ class FeaturedProductsListSliver extends StatelessWidget {
             if (!p.isFeaturedProductInitial && p.featuredProductList.isEmpty)
               return emptyWidget;
             return CustomHorizontalProductsListSectionWidget(
+                     onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FeaturedProducts(),
+                ),
+              )
+            },
               title: 'featured_products_ucf'.tr(context: context),
               isProductInitial: p.isFeaturedProductInitial,
               productList: p.featuredProductList,

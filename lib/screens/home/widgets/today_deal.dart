@@ -5,8 +5,12 @@ import 'package:active_ecommerce_cms_demo_app/presenter/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app_config.dart';
+import '../../../custom/home_banners/home_banners_list.dart' show HomeBannersList;
 import '../../../data_model/product_mini_response.dart';
+import '../../../data_model/slider_response.dart';
+import '../../../locale/custom_localization.dart';
 import '../../product/product_details.dart';
+import 'today_deal_all.dart';
 
 class TodaysDealProductsSliverWidget extends StatelessWidget {
   const TodaysDealProductsSliverWidget({super.key, this.title});
@@ -15,40 +19,80 @@ class TodaysDealProductsSliverWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todayDealList = context
-        .select<HomeProvider,
-            ({bool z, UnmodifiableListView<Product> products})>(
-          (value) => (
-            products: UnmodifiableListView(value.TodayDealList),
-            z: value.isTodayDealInitial
-          ),
-        )
-        .products;
+    final todayDealData = context.select<HomeProvider,
+        ({
+          bool z,
+          UnmodifiableListView<Product> products,
+          bool isBannerInitial,
+          UnmodifiableListView<AIZSlider> bannerImages
+        })>(
+      (value) => (
+        products: UnmodifiableListView(value.TodayDealList),
+        z: value.isTodayDealInitial,
+        isBannerInitial: value.isTodayDealBannerInitial,
+        bannerImages: UnmodifiableListView(value.todayDealBannerImageList),
+      ),
+    );
+    final todayDealList = todayDealData.products;
     if (todayDealList.isEmpty) {
       return const SliverToBoxAdapter(child: emptyWidget);
     }
 
     return SliverMainAxisGroup(
       slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: HomeBannersList(
+              isBannersInitial: todayDealData.isBannerInitial,
+              bannersImagesList: todayDealData.bannerImages,
+            ),
+          ),
+        ),
         if (title?.trim().isNotEmpty == true)
           SliverPadding(
             padding: const EdgeInsetsDirectional.only(
               start: AppDimensions.paddingLarge,
-              bottom: 10,
+              end: AppDimensions.paddingLarge,
             ),
             sliver: SliverToBoxAdapter(
-              child: Text(
-                title!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    title!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => TodaysDealViewAllScreen(),
+                          ),
+                        );
+                        
+                      },
+                      child: Text(    
+                        "view_all_ucf".tr(context: context),
+                        style:  TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 13,
+                   ),
+                  ),
+                    ),
+                ],
               ),
             ),
           ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 250,
+            height: 270,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

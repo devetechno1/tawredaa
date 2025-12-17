@@ -22,6 +22,7 @@ import '../custom/toast_component.dart';
 import '../data_model/address_response.dart';
 import '../data_model/category_response.dart';
 import '../data_model/popup_banner_model.dart';
+import '../data_model/today_deal_response.dart';
 import '../helpers/shared_value_helper.dart';
 import '../repositories/address_repository.dart';
 import '../screens/address.dart';
@@ -62,10 +63,14 @@ class HomeProvider extends ChangeNotifier {
   List<AIZSlider> bannerOneImageList = [];
   List<AIZSlider> bannerTwoImageList = [];
   List<AIZSlider> bannerThreeImageList = [];
+  List<AIZSlider> bannerFourImageList = [];
   List<AIZSlider> flashDealBannerImageList = [];
+  List<AIZSlider> todayDealBannerImageList = [];
   List<FlashDealResponseDatum> _banners = [];
   List<FlashDealResponseDatum> get banners => [..._banners];
   List<productMini.Product> bestSellingProductList = [];
+  List<productMini.Product> discountedProductList = [];
+
   List<productMini.Product> auctionProductList = [];
   List<Brands> brandsList = [];
   List<productMini.Product> TodayDealList = [];
@@ -80,15 +85,19 @@ class HomeProvider extends ChangeNotifier {
   bool isBannerOneInitial = true;
   bool isBannerTwoInitial = true;
   bool isBannerThreeInitial = true;
+  bool isBannerFourInitial = true;
   bool isFlashDealInitial = true;
   bool isBannerFlashDeal = true;
   bool isBrandsInitial = true;
   bool isTodayDwal = true;
 
   bool isBestSellingProductInitial = true;
+  bool isDiscountedProductInitial = true;
   int totalBestSellingProductData = 0;
+  int totalDiscountedProductData = 0;
   bool showBestSellingLoadingContainer = false;
-
+  bool showDiscountedLoadingContainer=false;
+  bool isTodayDealBannerInitial = true;
   bool isauctionProductInitial = true;
   int? totalauctionProductData;
   int bestauctionroductPage = 1;
@@ -139,6 +148,10 @@ class HomeProvider extends ChangeNotifier {
       fetchAuctionProducts(),
       fetchBrandsProducts(),
       fetchTodayDealProducts(),
+      fetchTodayDealBannerImages(),
+      fetchDiscountProducts(),
+      fetchBannerFourImags(),
+
       Provider.of<CartProvider>(context, listen: false).fetchData(context),
     ]);
   }
@@ -352,6 +365,20 @@ class HomeProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+   Future<void> fetchDiscountProducts() async {
+    if (showDiscountedLoadingContainer) return;
+
+    showDiscountedLoadingContainer = true;
+    productMini.ProductMiniResponse? discountproducts;
+    await executeAndHandleErrors(() async =>
+        discountproducts = await ProductRepository().getDiscountProducts());
+    discountedProductList.clear();
+    discountedProductList.addAll(discountproducts?.products ?? []);
+    showDiscountedLoadingContainer = false;
+    isDiscountedProductInitial = false;
+
+    notifyListeners();
+  }
 
   Future<void> fetchAuctionProducts() async {
     productMini.ProductMiniResponse? auction;
@@ -449,6 +476,20 @@ class HomeProvider extends ChangeNotifier {
     isFlashDealInitial = false;
     notifyListeners();
   }
+    Future<void> fetchTodayDealBannerImages() async {
+    TodaysDealBannerResponse? todayDealBannerResponse;
+    await executeAndHandleErrors(() async => todayDealBannerResponse =
+        await SlidersRepository().getTodaysDealBanner());
+    todayDealBannerImageList.clear();
+    if (todayDealBannerResponse != null &&
+        todayDealBannerResponse!.todaysDealBannerSmall != null) {
+      todayDealBannerImageList.add(AIZSlider(
+        photo: todayDealBannerResponse!.todaysDealBannerSmall, 
+      ));
+    }
+    isTodayDealBannerInitial = false;
+    notifyListeners();
+  }
 
   Future<void> fetchBannerTwoImages() async {
     SliderResponse? bannerTwoResponse;
@@ -472,7 +513,16 @@ class HomeProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+ Future<void> fetchBannerFourImags() async {
+    SliderResponse? bannerFourResponse;
+    await executeAndHandleErrors(() async =>
+        bannerFourResponse = await SlidersRepository().getBannerFourImages());
+    bannerFourImageList.clear();
+    bannerFourImageList.addAll(bannerFourResponse?.sliders ?? []);
+    isBannerFourInitial = false;
 
+    notifyListeners();
+  }
   Future<void> fetchFeaturedCategories() async {
     CategoryResponse? categoryResponse;
     await executeAndHandleErrors(() async =>
@@ -539,6 +589,12 @@ class HomeProvider extends ChangeNotifier {
     totalBestSellingProductData = 0;
     showBestSellingLoadingContainer = false;
   }
+  resetDiscountedProducts() {
+    discountedProductList.clear();
+    isDiscountedProductInitial = true;
+    totalDiscountedProductData = 0;
+    showDiscountedLoadingContainer = false;
+  }
 
   resetAuctionProducts() {
     auctionProductList.clear();
@@ -568,6 +624,7 @@ class HomeProvider extends ChangeNotifier {
       isBannerOneInitial = true;
       isBannerTwoInitial = true;
       isBannerThreeInitial = true;
+      isBannerFourInitial = true;
       isCategoryInitial = true;
       isFeaturedProductInitial = true;
       isAllProductInitial = true;
@@ -579,6 +636,7 @@ class HomeProvider extends ChangeNotifier {
     resetAllProductList();
     flashDealBannerImageList.clear();
     resetBestSellingProducts();
+    resetDiscountedProducts();
     resetAuctionProducts();
     resetTodayDeals();
   }

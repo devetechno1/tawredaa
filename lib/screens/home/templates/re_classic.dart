@@ -24,7 +24,7 @@ class ReClassicScreen extends StatelessWidget {
     return GlobalHomeScreenWidget(
       slivers: <Widget>[
         const SliverToBoxAdapter(child: HomeCarouselSlider()),
-        const CategoryList(),
+        const CategoryListHorizontal(),
 
         TodaysDealProductsSliverWidget(
           title: 'todays_deal_ucf'.tr(context: context),

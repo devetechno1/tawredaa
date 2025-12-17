@@ -41,7 +41,7 @@ class MinimaScreen extends StatelessWidget {
         const NewProductsListSliver(),
         //feature_categories//
 
-        const CategoryList(),
+        const CategoryListHorizontal(),
         const SliverToBoxAdapter(child: HomeBannersOne()),
         const FeaturedProductsListSliver(),
         const SliverToBoxAdapter(child: HomeBannersTwo()),

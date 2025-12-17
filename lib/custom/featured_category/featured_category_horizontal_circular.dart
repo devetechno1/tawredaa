@@ -12,8 +12,8 @@ import '../../data_model/category_response.dart';
 import '../../my_theme.dart';
 import 'package:active_ecommerce_cms_demo_app/locale/custom_localization.dart';
 
-class FeaturedCategoriesWidget extends StatelessWidget {
-  const FeaturedCategoriesWidget({Key? key}) : super(key: key);
+class FeaturedCategoryCircular extends StatelessWidget {
+  const FeaturedCategoryCircular({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +35,14 @@ class FeaturedCategoriesWidget extends StatelessWidget {
     if (p.isCategoryInitial && p.featuredCategoryList.isEmpty) {
       // Handle shimmer loading here (if no categories loaded yet)
       return SizedBox(
-        height: 387,
+        height: 230,
         child: ShimmerHelper().buildHorizontalGridShimmerWithAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: 1,
           aspectRatio: 1,
           crossAxisSpacing: 12.0,
           mainAxisSpacing: 12.0,
           item_count: 10,
-          mainAxisExtent: 170.0,
+          mainAxisExtent: 90.0,
         ),
       );
     } else if (p.featuredCategoryList.isNotEmpty) {
@@ -52,16 +52,16 @@ class FeaturedCategoriesWidget extends StatelessWidget {
           padding: const EdgeInsets.only(
               left: AppDimensions.paddingLarge,
               right: AppDimensions.paddingLarge,
-              top: 11,
-              bottom: 24),
+              top: 27,
+              ),
           scrollDirection: Axis.horizontal,
           itemCount: p.featuredCategoryList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               childAspectRatio: 1, // Ensures square boxes
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              mainAxisExtent: 170.0),
+              mainAxisExtent: 90.0),
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () {
@@ -78,16 +78,13 @@ class FeaturedCategoriesWidget extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  child: Row(
+                  child: Column( 
                     children: [
-                      SizedBox(
+                      SizedBox(                   
                         width: 80,
                         child: AspectRatio(
                             aspectRatio: 1,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.radiusNormal,
-                              ),
+                            child: ClipOval(
                               child: FadeInImage.assetNetwork(
                                 placeholder: AppImages.placeholder,
                                 image:
@@ -97,11 +94,11 @@ class FeaturedCategoriesWidget extends StatelessWidget {
                               ),
                             )),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 10,height: 5),
                       Flexible(
                         child: Text(
                           p.featuredCategoryList[index].name ?? '',
-                          textAlign: TextAlign.left,
+                          textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
                           softWrap: true,

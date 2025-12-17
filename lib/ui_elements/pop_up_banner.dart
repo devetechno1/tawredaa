@@ -18,101 +18,127 @@ class PopupBannerDialog extends StatelessWidget {
         child: Dialog(
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Stack(
+    children: [      
+       InkWell(
+          onTap: () {
+          Navigator.pop(context);
+          NavigationService.handleUrls(popupBannerModel.btnLink);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
             children: [
-              Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: CachedNetworkImage(
-                      // popupBannerModel.image ?? '',
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+              if ((popupBannerModel.image ?? '').trim().isNotEmpty) ...[
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: CachedNetworkImage(
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    imageUrl: popupBannerModel.image ?? '',
+                  ),
+                ),
+              ],
+            ],
+          ),
 
-                      imageUrl: popupBannerModel.image ?? '',
-                    ),
-                  ),
-                  Positioned(
-                    top: AppDimensions.paddingSmall,
-                    right: AppDimensions.paddingSmall,
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
+          if ((popupBannerModel.title ?? '').trim().isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.paddingDefault),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingDefault,
+              ),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Text(
+                  popupBannerModel.title ?? '',
+                  textDirection: (popupBannerModel.title ?? '').direction,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: const Icon(Icons.close, size: 15),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppDimensions.paddingDefault),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingDefault,
-                ),
-                child: SizedBox(
-                  width: double.maxFinite,
-                  child: Text(
-                    popupBannerModel.title ?? '',
-                    textDirection: (popupBannerModel.title ?? '').direction,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
                 ),
               ),
-              const SizedBox(height: AppDimensions.paddingSmall),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingDefault),
-                child: SizedBox(
-                  width: double.maxFinite,
-                  child: Text(
-                    popupBannerModel.summary ?? '',
-                    textDirection: (popupBannerModel.summary ?? '').direction,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+            ),
+          ],
+
+          if ((popupBannerModel.summary ?? '').trim().isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.paddingSmall),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingDefault,
+              ),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Text(
+                  popupBannerModel.summary ?? '',
+                  textDirection: (popupBannerModel.summary ?? '').direction,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
-              const SizedBox(height: AppDimensions.paddingDefault),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingDefault,
-                    vertical: AppDimensions.paddingSupSmall),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    NavigationService.handleUrls(popupBannerModel.btnLink);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(
-                        double.infinity, AppDimensions.paddingVeryExtraLarge),
-                    backgroundColor: popupBannerModel.btnBackgroundColor,
-                    shape: const RoundedRectangleBorder(),
+            ),
+          ],
+
+          if ((popupBannerModel.btnText ?? '').trim().isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.paddingDefault),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingDefault,
+                vertical: AppDimensions.paddingSupSmall,
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  NavigationService.handleUrls(popupBannerModel.btnLink);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(
+                    double.infinity,
+                    AppDimensions.paddingVeryExtraLarge,
                   ),
-                  child: Text(
-                    popupBannerModel.btnText ?? '',
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  backgroundColor: popupBannerModel.btnBackgroundColor,
+                  shape: const RoundedRectangleBorder(),
                 ),
+                child: Text(
+                  popupBannerModel.btnText ?? '',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    ), 
+    Positioned(
+      top: AppDimensions.paddingSmall,
+      right: AppDimensions.paddingSmall,
+      child: IgnorePointer(
+        ignoring: false,
+        child: Container(
+          width: 28,
+          height: 28,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4,
+                offset: Offset(0, 2),
               ),
             ],
           ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.close, size: 15),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+      ),
+    ),
+  ],
+),       
         ),
       ),
     );

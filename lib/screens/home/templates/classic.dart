@@ -28,7 +28,7 @@ class ClassicScreen extends StatelessWidget {
         const TodaysDealProductsSliverWidget(),
 
         //Featured category-----------------------
-        const CategoryList(),
+        const CategoryListHorizontal(),
 
         //BannerList---------------------
 

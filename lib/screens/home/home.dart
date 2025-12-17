@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
         ),
 
         //Featured Categories
-        const CategoryList(),
+        const CategoryListHorizontal(),
         const SliverToBoxAdapter(child: HomeBannersTwo()),
         // const  CategoryListVertical(crossAxisCount: 5,),
 

@@ -5,8 +5,10 @@ import 'package:active_ecommerce_cms_demo_app/data_model/flash_deal_response.dar
 import 'package:active_ecommerce_cms_demo_app/data_model/slider_response.dart';
 import 'package:active_ecommerce_cms_demo_app/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_cms_demo_app/repositories/api-request.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../data_model/popup_banner_model.dart';
+import '../data_model/today_deal_response.dart';
 
 class SlidersRepository {
   Future<SliderResponse> getSliders() async {
@@ -41,6 +43,18 @@ class SlidersRepository {
     );
     return sliderResponseFromJson(response.body);
   }
+      Future<TodaysDealBannerResponse> getTodaysDealBanner() async {
+    const String url = ("${AppConfig.BASE_URL}/todays-deal-banners");
+    final response = await ApiRequest.get(
+      url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },
+    );
+    debugPrint('TODAYS DEAL RESPONSE => ${response.body}');
+
+    return todaysDealBannerResponseFromJson(response.body);
+  }
 
   Future<SliderResponse> getBannerTwoImages() async {
     const String url = ("${AppConfig.BASE_URL}/banners-two");
@@ -64,6 +78,17 @@ class SlidersRepository {
       },
     );
 
+    return sliderResponseFromJson(response.body);
+  }
+    Future<SliderResponse> getBannerFourImages() async {
+    const String url = ("${AppConfig.BASE_URL}/banners-four");
+    final response = await ApiRequest.get(
+      url: url,
+      headers: {
+        "App-Language": app_language.$!,
+      },
+    );
+    print('BANNER FOUR RESPONSE => ${response.body}');
     return sliderResponseFromJson(response.body);
   }
 

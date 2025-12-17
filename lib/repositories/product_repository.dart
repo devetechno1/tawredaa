@@ -46,8 +46,21 @@ class ProductRepository {
       "Currency-Exchange-Rate":
           (SystemConfig.systemCurrency?.exchangeRate).toString(),
     });
+    print("bestselling: ${response.body}");
     return productMiniResponseFromJson(response.body);
   }
+    Future<ProductMiniResponse> getDiscountProducts() async {
+    const String url = ("${AppConfig.BASE_URL}/products/discounted");
+    final response = await ApiRequest.get(url: url, headers: {
+      "App-Language": app_language.$!,
+      "Currency-Code": SystemConfig.systemCurrency?.code ?? "",
+      "Currency-Exchange-Rate":
+          (SystemConfig.systemCurrency?.exchangeRate).toString(),
+    });
+    print("discount: ${response.body}");
+    return productMiniResponseFromJson(response.body);
+  }
+
 
   Future<ProductMiniResponse> getInHouseProducts({page}) async {
     final String url = ("${AppConfig.BASE_URL}/products/inhouse?page=$page");

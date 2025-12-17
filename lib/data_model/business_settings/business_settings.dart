@@ -273,6 +273,7 @@ class BusinessSettingsData extends Equatable {
   final String? clarityProjectId;
   final String? sentryDSN;
   final UpdateDataModel? updateData;
+  final String? categoryAppStyle;
 
   final List<OTPProviderModel> _otpProviders = List.empty(growable: true);
   List<OTPProviderModel> get otpProviders => _otpProviders;
@@ -550,6 +551,7 @@ class BusinessSettingsData extends Equatable {
     this.deliveryPickupLatitude,
     this.clarityProjectId,
     this.sentryDSN,
+     this.categoryAppStyle,
   });
 
   factory BusinessSettingsData.fromMap(Map<String, dynamic> data) {
@@ -860,7 +862,11 @@ class BusinessSettingsData extends Equatable {
         cuponTitle: (data['cupon_title'] as String?) == "1",
         cuponSubtitle: (data['cupon_subtitle'] as String?) == "1",
         deliveryPickupLongitude: double.tryParse(data['delivery_pickup_longitude']?.toString() ?? ''),
-        deliveryPickupLatitude: double.tryParse(data['delivery_pickup_latitude']?.toString() ?? ''));
+        deliveryPickupLatitude: double.tryParse(data['delivery_pickup_latitude']?.toString() ?? ''),
+          categoryAppStyle: data['category_app_style']?.toString(),
+        );
+        
+
   }
 
   void setOTPProviders(List<OTPProviderModel> newList) {
@@ -1943,6 +1949,7 @@ class BusinessSettingsData extends Equatable {
       cuponSubtitle,
       deliveryPickupLongitude,
       deliveryPickupLatitude,
+      categoryAppStyle,
     ];
   }
 }

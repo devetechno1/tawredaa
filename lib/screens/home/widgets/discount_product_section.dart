@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 import '../../../app_config.dart';
 import '../../../data_model/product_mini_response.dart';
 import '../../../presenter/home_provider.dart';
-import '../../product/top_selling_products.dart';
+import '../../product/discounted_products.dart';
 
-class BestSellingSectionSliver extends StatelessWidget {
-  const BestSellingSectionSliver({super.key});
+class DiscountProductSectionSliver extends StatelessWidget {
+  const DiscountProductSectionSliver({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +20,32 @@ class BestSellingSectionSliver extends StatelessWidget {
           HomeProvider,
           ({
             bool isBestSellingProductInitial,
-            UnmodifiableListView<Product> bestSellingProductList,
+            UnmodifiableListView<Product> discountedProductList,
             int totalBestSellingProductData,
           })>(
         selector: (_, p) => (
           isBestSellingProductInitial: p.isBestSellingProductInitial,
-          bestSellingProductList: UnmodifiableListView(p.bestSellingProductList),
+          discountedProductList: UnmodifiableListView(p.discountedProductList),
           totalBestSellingProductData: p.totalBestSellingProductData,
         ),
         builder: (context, p, child) {
           if (!p.isBestSellingProductInitial &&
-              p.bestSellingProductList.isEmpty) return emptyWidget;
+              p.discountedProductList.isEmpty) return emptyWidget;
           return CustomHorizontalProductsListSectionWidget(
-            onPressed: () => {
+                     onPressed: () => {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TopSellingProducts(),
+                  builder: (context) => DiscountedProducts(),
                 ),
               )
             },
-            title: 'best_selling'.tr(context: context),
+            title: 'discount_products'.tr(context: context),
             isProductInitial: p.isBestSellingProductInitial,
-            productList: p.bestSellingProductList,
+            productList: p.discountedProductList,
             numberOfTotalProducts: p.totalBestSellingProductData,
             onArriveTheEndOfList:
-                context.read<HomeProvider>().fetchBestSellingProducts,
+                context.read<HomeProvider>().fetchDiscountProducts,
           );
         },
       ),

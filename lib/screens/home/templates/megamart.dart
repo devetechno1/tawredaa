@@ -21,7 +21,7 @@ class MegamartScreen extends StatelessWidget {
     return const GlobalHomeScreenWidget(
       slivers: <Widget>[
         //Featured category-----------------------
-        CategoryList(),
+        CategoryListHorizontal(),
 
         CarouselAndFlashSaleSliver(),
         //move banner
