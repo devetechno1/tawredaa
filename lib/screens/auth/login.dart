@@ -919,14 +919,23 @@ Future<void> saveFCMToken() async {
       sound: true,
     );
 
+    if (Platform.isIOS) {
+      String? apnsToken = await _fcm.getAPNSToken();
+      if (apnsToken == null) {
+        await Future.delayed(const Duration(seconds: 3));
+        apnsToken = await _fcm.getAPNSToken();
+      }
+      if (apnsToken == null) {
+        await Future.delayed(const Duration(seconds: 3));
+        apnsToken = await _fcm.getAPNSToken();
+      }
+    }
+
     String? fcmToken;
     try {
       fcmToken = await _fcm.getToken();
     } catch (e) {
-      if (Platform.isIOS) {
-        fcmToken = await _fcm.getAPNSToken();
-      }
-      print('Caught exception: $e');
+      print("Error getting FCM token: $e");
     }
 
     print("--fcm token-- login");
