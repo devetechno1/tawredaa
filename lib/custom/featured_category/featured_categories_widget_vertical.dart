@@ -21,7 +21,7 @@ class FeatureCategoriesWidgetVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final int  cross = GridResponsive.columnsForWidth(context);
+    final int cross = GridResponsive.columnsForWidth(context);
     if (isCategoryInitial && featuredCategoryList.isEmpty) {
       // Handle shimmer loading here (if no categories loaded yet)
       return ShimmerHelper().buildGridShimmerWithAxisCount(
@@ -33,6 +33,24 @@ class FeatureCategoriesWidgetVertical extends StatelessWidget {
         mainAxisExtent: 170.0,
       );
     } else if (featuredCategoryList.isNotEmpty) {
+      // Calculate dynamic mainAxisExtent for tablets
+      var width = MediaQuery.of(context).size.width;
+      double mainAxisExtent = 150.0; // Default for mobile
+
+      if (width > GridResponsive.bpSm) {
+        // Tablet logic:
+        // Total horizontal padding: 20 (left) + 20 (right) = 40
+        // Total cross axis spacing: (crossAxisCount - 1) * 12
+        // Item width = (Screen Width - Padding - Spacing) / crossAxisCount
+        // Height needed = ItemWidth (image aspect ratio 1:1) + 90 (text + vertical spacing/padding estimate)
+
+        double horizontalPadding = AppDimensions.paddingLarge * 2;
+        double totalSpacing = (crossAxisCount - 1) * 12;
+        double itemWidth =
+            (width - horizontalPadding - totalSpacing) / crossAxisCount;
+        mainAxisExtent = itemWidth + 90;
+      }
+
       return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -48,7 +66,7 @@ class FeatureCategoriesWidgetVertical extends StatelessWidget {
             childAspectRatio: 1, // Ensures square boxes
             crossAxisSpacing: 12,
             mainAxisSpacing: 3,
-            mainAxisExtent: 150.0),
+            mainAxisExtent: mainAxisExtent),
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
