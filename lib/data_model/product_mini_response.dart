@@ -176,12 +176,15 @@ class ProductMiniResponse {
     this.meta,
     required this.success,
     this.status,
+    this.flatdiscount,
   });
 
   List<Product>? products;
   bool success;
   int? status;
   Meta? meta;
+  final  flatdiscount;
+
 
   factory ProductMiniResponse.fromJson(Map<String, dynamic> json) =>
       ProductMiniResponse(
@@ -193,6 +196,8 @@ class ProductMiniResponse {
         meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
         success: json["success"] == true,
         status: json["status"],
+
+        flatdiscount: json["flat_discount"],
       );
 
   void get data {}
@@ -204,6 +209,7 @@ class ProductMiniResponse {
         "meta": meta == null ? null : meta!.toJson(),
         "success": success,
         "status": status,
+        "flat_discount": flatdiscount,
       };
 }
 
@@ -221,6 +227,7 @@ class Product extends Equatable {
     this.sales,
     this.links,
     this.isWholesale,
+    this.flatdiscount,
   });
 
   final int? id;
@@ -235,6 +242,7 @@ class Product extends Equatable {
   final int? sales;
   final Links? links;
   final bool? isWholesale;
+  final  flatdiscount;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -249,6 +257,7 @@ class Product extends Equatable {
         sales: json["sales"],
         links: Links.fromJson(json["links"]),
         isWholesale: json["isWholesale"],
+        flatdiscount: json["flat_discount"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -264,6 +273,7 @@ class Product extends Equatable {
         "sales": sales,
         "links": links!.toJson(),
         "isWholesale": isWholesale,
+        "flat_discount": flatdiscount,
       };
 
   @override
@@ -280,6 +290,7 @@ class Product extends Equatable {
         sales,
         links,
         isWholesale,
+        flatdiscount,
       ];
 }
 

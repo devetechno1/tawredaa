@@ -372,7 +372,7 @@ class _PagedViewState<T> extends State<PagedView<T>> {
       padding: widget.padding,
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: cross,
+          crossAxisCount: 3,
           mainAxisSpacing: widget.mainAxisSpacing,
           crossAxisSpacing: widget.crossAxisSpacing,
           childAspectRatio: ratio,

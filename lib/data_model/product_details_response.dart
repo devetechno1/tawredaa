@@ -75,7 +75,8 @@ class DetailedProduct {
       this.link,
       this.brand,
       this.wholesale,
-      this.estShippingTime});
+      this.estShippingTime,
+      this.flatdiscount});
 
   int? id;
   String? name;
@@ -112,6 +113,7 @@ class DetailedProduct {
   Brand? brand;
   List<Wholesale>? wholesale;
   int? estShippingTime;
+  String? flatdiscount;
 
   factory DetailedProduct.fromJson(Map<String, dynamic> json) =>
       DetailedProduct(
@@ -124,6 +126,7 @@ class DetailedProduct {
         shop_name: json["shop_name"],
         shop_logo: json["shop_logo"],
         estShippingTime: json["est_shipping_time"],
+        flatdiscount: json["flat_discount"]?.toString(),
         photos: json["photos"] == null
             ? null
             : List<Photo>.from(json["photos"].map((x) => Photo.fromJson(x))),
@@ -163,6 +166,7 @@ class DetailedProduct {
             ? null
             : List<Wholesale>.from(
                 json["wholesale"].map((x) => Wholesale.fromJson(x))),
+        
       );
 
   Map<String, dynamic> toJson() => {
@@ -197,6 +201,7 @@ class DetailedProduct {
         "rating_count": rating_count,
         "earn_point": earn_point,
         "description": description,
+        "flat_discount": flatdiscount,
         "downloads": downloads,
         "video_link": video_link,
         "link": link,

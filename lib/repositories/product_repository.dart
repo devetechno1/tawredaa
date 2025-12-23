@@ -11,6 +11,7 @@ import 'package:active_ecommerce_cms_demo_app/helpers/system_config.dart';
 import 'package:active_ecommerce_cms_demo_app/locale/custom_localization.dart';
 import 'package:active_ecommerce_cms_demo_app/repositories/api-request.dart';
 import 'package:active_ecommerce_cms_demo_app/data_model/wholesale_model.dart';
+import 'package:flutter/rendering.dart';
 
 import '../data_model/variant_price_response.dart';
 
@@ -129,7 +130,8 @@ class ProductRepository {
       brands = "",
       categories = "",
       min = "",
-      max = ""}) async {
+      max = "",
+      flatdiscount = ""}) async {
     final String url = ("${AppConfig.BASE_URL}/products/search" +
         "?page=$page&name=$name&sort_key=$sort_key&brands=$brands&categories=$categories&min=$min&max=$max");
 
@@ -137,6 +139,8 @@ class ProductRepository {
       "App-Language": app_language.$!,
     });
     log("reeeees ${response.body}");
+                 final body = response.body;
+debugPrint('has flat_discount key? ${body.contains('"flat_discount"')}');  
     return productMiniResponseFromJson(response.body);
     
   }
@@ -173,7 +177,9 @@ class ProductRepository {
       throw jsonDecode(response.body)["message"]?.toString() ??
           "some_things_went_wrong".tr();
     }
-
+         print("product details: ${response.body}"); 
+         final body = response.body;
+debugPrint('has flat_discount key? ${body.contains('"flat_discount"')}');           
     return productDetailsResponseFromJson(response.body);
   }
 

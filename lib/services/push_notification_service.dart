@@ -146,20 +146,29 @@ class PushNotificationService {
 
   static Future<void> updateDeviceToken() async {
     if (is_logged_in.$) {
+      if (Platform.isIOS) {
+        String? apnsToken = await _fcm.getAPNSToken();
+        if (apnsToken == null) {
+          await Future.delayed(const Duration(seconds: 3));
+          apnsToken = await _fcm.getAPNSToken();
+        }
+        if (apnsToken == null) {
+          await Future.delayed(const Duration(seconds: 3));
+          apnsToken = await _fcm.getAPNSToken();
+        }
+      }
+
       String? fcmToken;
       try {
         fcmToken = await _fcm.getToken();
       } catch (e) {
-        if (Platform.isIOS) {
-          fcmToken = await _fcm.getAPNSToken();
-        }
-        print('Caught exception: $e');
+        print("Error getting FCM token: $e");
       }
 
       print("fcmToken $fcmToken");
 
-      if (fcmToken?.isNotEmpty == true) {
-        await ProfileRepository().getDeviceTokenUpdateResponse(fcmToken!);
+      if (fcmToken != null) {
+        await ProfileRepository().getDeviceTokenUpdateResponse(fcmToken);
       }
     }
   }

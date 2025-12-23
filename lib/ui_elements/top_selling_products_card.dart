@@ -15,6 +15,7 @@ class TopSellingProductsCard extends StatefulWidget {
   String? main_price;
   String? stroked_price;
   bool? has_discount;
+  String? flatdiscount;
 
   TopSellingProductsCard(
       {Key? key,
@@ -24,7 +25,8 @@ class TopSellingProductsCard extends StatefulWidget {
       this.name,
       this.main_price,
       this.stroked_price,
-      this.has_discount})
+      this.has_discount,
+      this.flatdiscount})
       : super(key: key);
 
   @override

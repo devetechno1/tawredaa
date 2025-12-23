@@ -47,13 +47,13 @@ class FeaturedCategoriesWidget extends StatelessWidget {
       );
     } else if (p.featuredCategoryList.isNotEmpty) {
       return SizedBox(
-        height: 210,
+        height: 230,
         child: GridView.builder(
           padding: const EdgeInsets.only(
               left: AppDimensions.paddingLarge,
               right: AppDimensions.paddingLarge,
               top: 11,
-              bottom: 5),
+              bottom: 24),
           scrollDirection: Axis.horizontal,
           itemCount: p.featuredCategoryList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

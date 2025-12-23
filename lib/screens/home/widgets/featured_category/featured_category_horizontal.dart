@@ -14,18 +14,11 @@ class CategoryListHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ({
-      UnmodifiableListView<Category> featuredCategoryList,
-      bool isCategoryInitial
-    }) p = context.select<
-        HomeProvider,
-        ({
-          bool isCategoryInitial,
-          UnmodifiableListView<Category> featuredCategoryList
-        })>(
+    final ({UnmodifiableListView<Category> featuredCategoryList, bool isCategoryInitial}) p =
+        context.select<HomeProvider,
+            ({bool isCategoryInitial, UnmodifiableListView<Category> featuredCategoryList})>(
       (provider) => (
-        featuredCategoryList:
-            UnmodifiableListView(provider.featuredCategoryList),
+        featuredCategoryList: UnmodifiableListView(provider.featuredCategoryList),
         isCategoryInitial: provider.isCategoryInitial,
       ),
     );
@@ -34,7 +27,7 @@ class CategoryListHorizontal extends StatelessWidget {
     }
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 200,
+        height: 220,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,7 +43,8 @@ class CategoryListHorizontal extends StatelessWidget {
                 ),
               ),
             ),
-            const Expanded(child: FeaturedCategoriesWidget()),
+            const Expanded(child: FeaturedCategoriesWidget(
+            )),
           ],
         ),
       ),

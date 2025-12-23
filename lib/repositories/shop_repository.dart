@@ -7,6 +7,7 @@ import 'package:active_ecommerce_cms_demo_app/data_model/shop_details_response.d
 import 'package:active_ecommerce_cms_demo_app/data_model/product_mini_response.dart';
 import 'package:active_ecommerce_cms_demo_app/repositories/api-request.dart';
 import 'package:active_ecommerce_cms_demo_app/helpers/shared_value_helper.dart';
+import 'package:flutter/cupertino.dart';
 
 class ShopRepository {
   Future<ShopResponse> getShops({name = "", page = 1}) async {
@@ -19,6 +20,9 @@ class ShopRepository {
         "App-Language": app_language.$!,
       },
     );
+    print("shopsresponse ${response.body}");
+             final body = response.body;
+debugPrint('has flat_discount key? ${body.contains('"flat_discount"')}');  
 
     return shopResponseFromJson(response.body);
   }

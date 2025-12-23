@@ -13,6 +13,7 @@ class ShopSquareCard extends StatefulWidget {
   final String shopSlug;
   final String? name;
   final double? stars;
+  final String? flatdiscount;
 
   const ShopSquareCard({
     Key? key,
@@ -21,6 +22,7 @@ class ShopSquareCard extends StatefulWidget {
     this.name,
     this.stars,
     required this.shopSlug,
+    this.flatdiscount,
   }) : super(key: key);
 
   @override
@@ -46,16 +48,18 @@ class _ShopSquareCardState extends State<ShopSquareCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              height: 165,
-              width: 170,
-              alignment: Alignment.topCenter,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusNormal),
+            Expanded(
+              child: Container(
+                height: 165,
+                width: 170,
+                alignment: Alignment.topCenter,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusNormal),
+                ),
+                child: _buildImage(),
               ),
-              child: _buildImage(),
             ),
             Column(
               // mainAxisAlignment: MainAxisAlignment.spaceAround,

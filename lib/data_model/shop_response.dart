@@ -47,6 +47,8 @@ class Shop {
     this.name,
     this.logo,
     this.rating,
+    this.flatdiscount,
+
   });
 
   int? id;
@@ -54,6 +56,7 @@ class Shop {
   String? name;
   String? logo;
   var rating;
+  String? flatdiscount;
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
         id: json["id"],
@@ -61,6 +64,7 @@ class Shop {
         name: json["name"],
         logo: json["logo"],
         rating: json["rating"],
+        flatdiscount: json["flat_discount"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +73,7 @@ class Shop {
         "name": name,
         "logo": logo,
         "rating": rating,
+        "flat_discount": flatdiscount,
       };
 }
 

@@ -105,6 +105,8 @@ class ProductHorizontalListWidget extends StatelessWidget {
                       isWholesale: productList[index].isWholesale,
                       priceTextStyle: priceTextStyle,
                       nameTextStyle: nameTextStyle,
+                      discount: productList[index].discount,
+                      flatdiscount: productList[index].flatdiscount,
                     );
             },
           ),

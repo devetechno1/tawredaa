@@ -75,6 +75,7 @@ class HomeAllProductsSliver extends StatelessWidget {
               has_discount: data.allProductList[index].has_discount == true,
               discount: data.allProductList[index].discount,
               isWholesale: data.allProductList[index].isWholesale,
+              flatdiscount: data.allProductList[index].flatdiscount,
             );
           });
     } else if (data.totalAllProductData == 0) {

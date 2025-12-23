@@ -57,20 +57,16 @@ class _FilterState extends State<Filter> {
   final _amountValidator = RegExInputFormatter.withRegex(
       '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$');
 
-  // final ScrollController _productScrollController = ScrollController();
-
   final PagedViewController<Product> _productController =
       PagedViewController<Product>();
   final PagedViewController<Brands> _brandController =
       PagedViewController<Brands>();
-
   final PagedViewController<Shop> _shopController = PagedViewController<Shop>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // ScrollController? _scrollController;
   WhichFilter? _selectedFilter;
-  String? _givenSelectedFilterOptionKey; // may be it can come from another page
+  String? _givenSelectedFilterOptionKey;
   String? _selectedSort = "";
 
   final List<WhichFilter> _which_filter_list = WhichFilter.getWhichFilterList();
@@ -82,16 +78,14 @@ class _FilterState extends State<Filter> {
   final TextEditingController _minPriceController = TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
 
-  //--------------------
+  // ✅ NEW: flat discount input
+  final TextEditingController _flatDiscountController = TextEditingController();
+
   final List<dynamic> _filterBrandList = [];
   final List<dynamic> _filterCategoryList = [];
-
   final List<dynamic> _searchSuggestionList = [];
 
-  //----------------------------------------
   String? _searchKey = "";
-
-  //----------------------------------------
 
   fetchFilteredBrands() async {
     final filteredBrandResponse = await BrandRepository().getFilterPageBrands();
@@ -117,6 +111,7 @@ class _FilterState extends State<Filter> {
     _searchController.dispose();
     _minPriceController.dispose();
     _maxPriceController.dispose();
+    _flatDiscountController.dispose(); // ✅ NEW
     super.dispose();
   }
 
@@ -144,41 +139,6 @@ class _FilterState extends State<Filter> {
     } else {
       _productController.refresh();
     }
-
-    //set scroll listeners
-
-    // _productScrollController.addListener(() {
-    //   if (_productScrollController.position.pixels ==
-    //       _productScrollController.position.maxScrollExtent) {
-    //     setState(() {
-    //       _productPage++;
-    //     });
-    //     _showProductLoadingContainer = true;
-    //     fetchProductData();
-    //   }
-    // });
-
-    // _brandScrollController.addListener(() {
-    //   if (_brandScrollController.position.pixels ==
-    //       _brandScrollController.position.maxScrollExtent) {
-    //     setState(() {
-    //       _brandPage++;
-    //     });
-    //     _showBrandLoadingContainer = true;
-    //     fetchBrandData();
-    //   }
-    // });
-
-    // _shopScrollController.addListener(() {
-    //   if (_shopScrollController.position.pixels ==
-    //       _shopScrollController.position.maxScrollExtent) {
-    //     setState(() {
-    //       _shopPage++;
-    //     });
-    //     _showShopLoadingContainer = true;
-    //     fetchShopData();
-    //   }
-    // });
   }
 
   Future<PageResult<Product>> _fetchProducts(int page) async {
@@ -192,7 +152,9 @@ class _FilterState extends State<Filter> {
         categories: _selectedCategories.join(",").toString(),
         max: _maxPriceController.text.toString(),
         min: _minPriceController.text.toString(),
+        flatdiscount: _flatDiscountController.text.toString(), // ✅ NEW
       );
+
       final List<Product> list = res.products ?? [];
       final bool hasMore = list.isNotEmpty;
       return PageResult<Product>(data: list, hasMore: hasMore);
@@ -229,15 +191,6 @@ class _FilterState extends State<Filter> {
     _searchSuggestionList.clear();
     setState(() {});
   }
-
-  // resetShopList() {
-  //   _shopList.clear();
-  //   _isShopInitial = true;
-  //   _totalShopData = 0;
-  //   _shopPage = 1;
-  //   _showShopLoadingContainer = false;
-  //   setState(() {});
-  // }
 
   void _applyProductFilter() {
     reset();
@@ -285,44 +238,6 @@ class _FilterState extends State<Filter> {
     return items;
   }
 
-  // Widget buildProductLoadingContainer() {
-  //   if (_totalProductData != _productList.length) return emptyWidget;
-  //   return Container(
-  //     height: _showProductLoadingContainer ? 36 : 0,
-  //     width: double.infinity,
-  //     color: Colors.white,
-  //     child: Center(
-  //       child: Text('no_more_products_ucf'.tr(context: context)),
-  //     ),
-  //   );
-  // }
-
-  // Widget buildBrandLoadingContainer() {
-  //   if (_totalBrandData != _brandList.length) return emptyWidget;
-  //   return Container(
-  //     height: _showBrandLoadingContainer ? 36 : 0,
-  //     width: double.infinity,
-  //     color: Colors.white,
-  //     child: Center(
-  //       child: Text('no_more_brands_ucf'.tr(context: context)),
-  //     ),
-  //   );
-  // }
-
-  // Widget buildShopLoadingContainer() {
-  //   if (_totalShopData != _shopList.length) return emptyWidget;
-  //   return Container(
-  //     height: _showShopLoadingContainer ? 36 : 0,
-  //     width: double.infinity,
-  //     color: Colors.white,
-  //     child: Center(
-  //       child: Text('no_more_shops_ucf'.tr(context: context)),
-  //     ),
-  //   );
-  // }
-
-  //--------------------
-
   static const double _refreshEdgeOffset = 150.0;
 
   @override
@@ -350,13 +265,6 @@ class _FilterState extends State<Filter> {
               right: 0.0,
               child: appBar,
             ),
-            // Align(
-            //     alignment: Alignment.bottomCenter,
-            //     child: _selectedFilter!.option_key == 'product'
-            //         ? buildProductLoadingContainer()
-            //         : (_selectedFilter!.option_key == 'brands'
-            //             ? buildBrandLoadingContainer()
-            //             : buildShopLoadingContainer()))
           ],
         ),
       ),
@@ -423,7 +331,6 @@ class _FilterState extends State<Filter> {
                 setState(() {
                   _selectedFilter = selectedFilter;
                 });
-
                 _onWhichFilterChange();
               },
             ),
@@ -438,7 +345,6 @@ class _FilterState extends State<Filter> {
                       'you_can_use_sorting_while_searching_for_products'
                           .tr(context: context),
                     );
-              ;
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -621,131 +527,114 @@ class _FilterState extends State<Filter> {
 
   Row buildTopAppBar(BuildContext context) {
     String searchedWord = '';
-    return Row(
-        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          IconButton(
-            padding: EdgeInsets.zero,
-            icon: UsefulElements.backButton(),
-            onPressed: () => Navigator.pop(context),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: SizedBox(
-              width: MediaQuery.sizeOf(context).width * .85,
-              height: 70,
-              child: Padding(
-                  padding: MediaQuery.viewPaddingOf(context).top >
-                          30 //MediaQuery.viewPaddingOf(context).top is the statusbar height, with a notch phone it results almost 50, without a notch it shows 24.0.For safety we have checked if its greater than thirty
-                      ? const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 0.0)
-                      : const EdgeInsets.symmetric(
-                          vertical: 5.0, horizontal: 0.0),
-                  child: TypeAheadField<SearchSuggestionResponse>(
-                    controller: _searchController,
-                    suggestionsCallback: (pattern) async {
-                      //return await BackendService.getSuggestions(pattern);
-                      final suggestions = await SearchRepository()
-                          .getSearchSuggestionListResponse(
-                              query_key: pattern,
-                              type: _selectedFilter!.option_key);
-                      //print(suggestions.toString());
-                      return suggestions;
-                    },
-                    loadingBuilder: (context) {
-                      return Container(
-                        height: 40,
-                        color: Colors.white,
-                        child: Center(
-                            child: Text(
-                                'loading_suggestions'.tr(context: context),
-                                style: const TextStyle(
-                                    color: MyTheme.medium_grey))),
-                      );
-                    },
-                    itemBuilder: (context, suggestion) {
-                      //print(suggestion.toString());
-                      String subtitle =
-                          "${'searched_for_all_lower'.tr(context: context)} ${suggestion.count} ${'times_all_lower'.tr(context: context)}";
-                      if (suggestion.type != "search") {
-                        final String key =
-                            "${suggestion.type_string?.toLowerCase()}_ucf";
-                        final String tr = key.tr(context: context);
-                        subtitle =
-                            "${tr == key ? suggestion.type_string : tr} ${'found_all_lower'.tr(context: context)}";
-                      }
-                      final q = suggestion.query ?? '';
-                      return Directionality(
-                        textDirection: q.direction,
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          dense: true,
-                          title: HighlightedSearchedWord(
-                            q,
-                            searchedText: searchedWord,
-                            style: TextStyle(
-                              color: suggestion.type != "search"
-                                  ? Theme.of(context).primaryColor
-                                  : MyTheme.font_grey,
-                            ),
-                          ),
-                          subtitle: Text(
-                            subtitle,
-                            style: TextStyle(
-                              color: suggestion.type != "search"
-                                  ? MyTheme.font_grey
-                                  : MyTheme.medium_grey,
-                            ),
+    return Row(children: <Widget>[
+      IconButton(
+        padding: EdgeInsets.zero,
+        icon: UsefulElements.backButton(),
+        onPressed: () => Navigator.pop(context),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: SizedBox(
+          width: MediaQuery.sizeOf(context).width * .85,
+          height: 70,
+          child: Padding(
+              padding: MediaQuery.viewPaddingOf(context).top > 30
+                  ? const EdgeInsets.symmetric(vertical: 15.0, horizontal: 0.0)
+                  : const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
+              child: TypeAheadField<SearchSuggestionResponse>(
+                controller: _searchController,
+                suggestionsCallback: (pattern) async {
+                  final suggestions = await SearchRepository()
+                      .getSearchSuggestionListResponse(
+                          query_key: pattern, type: _selectedFilter!.option_key);
+                  return suggestions;
+                },
+                loadingBuilder: (context) {
+                  return Container(
+                    height: 40,
+                    color: Colors.white,
+                    child: Center(
+                        child: Text('loading_suggestions'.tr(context: context),
+                            style: const TextStyle(
+                                color: MyTheme.medium_grey))),
+                  );
+                },
+                itemBuilder: (context, suggestion) {
+                  String subtitle =
+                      "${'searched_for_all_lower'.tr(context: context)} ${suggestion.count} ${'times_all_lower'.tr(context: context)}";
+                  if (suggestion.type != "search") {
+                    final String key =
+                        "${suggestion.type_string?.toLowerCase()}_ucf";
+                    final String tr = key.tr(context: context);
+                    subtitle =
+                        "${tr == key ? suggestion.type_string : tr} ${'found_all_lower'.tr(context: context)}";
+                  }
+                  final q = suggestion.query ?? '';
+                  return Directionality(
+                    textDirection: q.direction,
+                    child: ListTile(
+                      tileColor: Colors.white,
+                      dense: true,
+                      title: HighlightedSearchedWord(
+                        q,
+                        searchedText: searchedWord,
+                        style: TextStyle(
+                          color: suggestion.type != "search"
+                              ? Theme.of(context).primaryColor
+                              : MyTheme.font_grey,
+                        ),
+                      ),
+                      subtitle: Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: suggestion.type != "search"
+                              ? MyTheme.font_grey
+                              : MyTheme.medium_grey,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                onSelected: (s) => onSearch(s.query ?? ''),
+                builder: (context, controller, focusNode) {
+                  searchedWord = controller.text;
+                  return TextField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    obscureText: false,
+                    onChanged: (value) => searchedWord = value,
+                    onSubmitted: onSearch,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: MyTheme.white,
+                        suffixIcon: const Icon(Icons.search,
+                            color: MyTheme.medium_grey),
+                        hintText: 'search_here_ucf'.tr(context: context),
+                        hintStyle: const TextStyle(
+                            fontSize: 12.0, color: MyTheme.textfield_grey),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: MyTheme.noColor, width: 0.5),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(AppDimensions.radiusSmall),
                           ),
                         ),
-                      );
-                    },
-                    onSelected: (s) => onSearch(s.query ?? ''),
-                    builder: (context, controller, focusNode) {
-                      searchedWord = controller.text;
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        obscureText: false,
-                        onChanged: (value) => searchedWord = value,
-                        onSubmitted: onSearch,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: MyTheme.white,
-                            suffixIcon: const Icon(Icons.search,
-                                color: MyTheme.medium_grey),
-                            hintText: 'search_here_ucf'.tr(context: context),
-                            hintStyle: const TextStyle(
-                                fontSize: 12.0, color: MyTheme.textfield_grey),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: MyTheme.noColor, width: 0.5),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(AppDimensions.radiusSmall),
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: MyTheme.noColor, width: 1.0),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(AppDimensions.radiusSmall),
-                              ),
-                            ),
-                            contentPadding: const EdgeInsetsDirectional.only(
-                                start: 8.0, top: 5.0, bottom: 5.0)),
-                      );
-                    },
-                  )),
-            ),
-          ),
-          // IconButton(
-          //     icon: Icon(Icons.search, color: MyTheme.dark_grey),
-          //     onPressed: () {
-          //       _searchKey = _searchController.text.toString();
-          //       setState(() {});
-          //       _onSearchSubmit();
-          //     }),
-        ]);
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: MyTheme.noColor, width: 1.0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(AppDimensions.radiusSmall),
+                          ),
+                        ),
+                        contentPadding: const EdgeInsetsDirectional.only(
+                            start: 8.0, top: 5.0, bottom: 5.0)),
+                  );
+                },
+              )),
+        ),
+      ),
+    ]);
   }
 
   void onSearch(String query) {
@@ -765,108 +654,138 @@ class _FilterState extends State<Filter> {
           padding: const EdgeInsets.only(top: 50),
           child: Column(
             children: [
+              // ✅ Price + Flat Discount block
               Container(
-                height: 100,
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.paddingDefault),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: AppDimensions.paddingSmall),
-                        child: Text(
-                          'price_range_ucf'.tr(context: context),
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                height: 160,
+                padding: const EdgeInsets.all(AppDimensions.paddingDefault),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: AppDimensions.paddingSmall),
+                      child: Text(
+                        'price_range_ucf'.tr(context: context),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 30,
+                          width: 100,
+                          margin: const EdgeInsets.only(
+                              bottom: AppDimensions.paddingSmall),
+                          child: TextField(
+                            controller: _minPriceController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [_amountValidator],
+                            decoration: InputDecoration(
+                                hintText: 'minimum_ucf'.tr(context: context),
+                                hintStyle: const TextStyle(
+                                    fontSize: 12.0,
+                                    color: MyTheme.textfield_grey),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 1.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimensions.radiusSmallExtra),
+                                  ),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimensions.radiusSmallExtra),
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.all(4.0)),
+                          ),
+                        ),
+                        const Text(" - "),
+                        Container(
+                          height: 30,
+                          width: 100,
+                          margin: const EdgeInsets.only(
+                              bottom: AppDimensions.paddingSmall),
+                          child: TextField(
+                            controller: _maxPriceController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [_amountValidator],
+                            decoration: InputDecoration(
+                                hintText: 'maximum_ucf'.tr(context: context),
+                                hintStyle: const TextStyle(
+                                    fontSize: 12.0,
+                                    color: MyTheme.textfield_grey),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 1.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimensions.radiusSmallExtra),
+                                  ),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: MyTheme.textfield_grey,
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimensions.radiusSmallExtra),
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.all(4.0)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // ✅ NEW: Flat Discount
+                    Text(
+                      'flat_discount_ucf'.tr(context: context),
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: 30,
+                      width: 220,
+                      child: TextField(
+                        controller: _flatDiscountController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [_amountValidator],
+                        decoration: InputDecoration(
+                          hintText: 'flat_discount_ucf'.tr(context: context),
+                          hintStyle: const TextStyle(
+                              fontSize: 12.0, color: MyTheme.textfield_grey),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MyTheme.textfield_grey, width: 1.0),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(AppDimensions.radiusSmallExtra),
+                            ),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MyTheme.textfield_grey, width: 2.0),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(AppDimensions.radiusSmallExtra),
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.all(4.0),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: AppDimensions.paddingSmall),
-                            child: Container(
-                              height: 30,
-                              width: 100,
-                              child: TextField(
-                                controller: _minPriceController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [_amountValidator],
-                                decoration: InputDecoration(
-                                    hintText:
-                                        'minimum_ucf'.tr(context: context),
-                                    hintStyle: const TextStyle(
-                                        fontSize: 12.0,
-                                        color: MyTheme.textfield_grey),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyTheme.textfield_grey,
-                                          width: 1.0),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            AppDimensions.radiusSmallExtra),
-                                      ),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyTheme.textfield_grey,
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            AppDimensions.radiusSmallExtra),
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(4.0)),
-                              ),
-                            ),
-                          ),
-                          const Text(" - "),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: AppDimensions.paddingSmall),
-                            child: Container(
-                              height: 30,
-                              width: 100,
-                              child: TextField(
-                                controller: _maxPriceController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [_amountValidator],
-                                decoration: InputDecoration(
-                                    hintText:
-                                        'maximum_ucf'.tr(context: context),
-                                    hintStyle: const TextStyle(
-                                        fontSize: 12.0,
-                                        color: MyTheme.textfield_grey),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyTheme.textfield_grey,
-                                          width: 1.0),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            AppDimensions.radiusSmallExtra),
-                                      ),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MyTheme.textfield_grey,
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                            AppDimensions.radiusSmallExtra),
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(4.0)),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+
               Expanded(
                 child: CustomScrollView(slivers: [
                   SliverList(
@@ -880,14 +799,14 @@ class _FilterState extends State<Filter> {
                         ),
                       ),
                       _filterCategoryList.isEmpty
-                          ? Container(
+                          ? SizedBox(
                               height: 100,
                               child: Center(
                                 child: Text(
                                   'no_category_is_available'
                                       .tr(context: context),
-                                  style:
-                                      const TextStyle(color: MyTheme.font_grey),
+                                  style: const TextStyle(
+                                      color: MyTheme.font_grey),
                                 ),
                               ),
                             )
@@ -903,13 +822,13 @@ class _FilterState extends State<Filter> {
                         ),
                       ),
                       _filterBrandList.isEmpty
-                          ? Container(
+                          ? SizedBox(
                               height: 100,
                               child: Center(
                                 child: Text(
                                   'no_brand_is_available'.tr(context: context),
-                                  style:
-                                      const TextStyle(color: MyTheme.font_grey),
+                                  style: const TextStyle(
+                                      color: MyTheme.font_grey),
                                 ),
                               ),
                             )
@@ -920,17 +839,18 @@ class _FilterState extends State<Filter> {
                   )
                 ]),
               ),
-              Container(
+              SizedBox(
                 height: 70,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red),
                       onPressed: () {
                         _minPriceController.clear();
                         _maxPriceController.clear();
+                        _flatDiscountController.clear(); // ✅ NEW
                         setState(() {
                           _selectedCategories.clear();
                           _selectedBrands.clear();
@@ -1064,6 +984,7 @@ class _FilterState extends State<Filter> {
         has_discount: product.has_discount == true,
         discount: product.discount,
         isWholesale: product.isWholesale,
+        flatdiscount: product.flatdiscount,
       ),
     );
   }
@@ -1096,6 +1017,7 @@ class _FilterState extends State<Filter> {
         image: shop.logo,
         name: shop.name,
         stars: double.parse(shop.rating.toString()),
+        flatdiscount: shop.flatdiscount,
       ),
     );
   }
