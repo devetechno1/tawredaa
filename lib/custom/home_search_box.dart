@@ -48,49 +48,6 @@ class HomeSearchBox extends StatelessWidget {
               AppConfig.search_bar_text(context),
               style: const TextStyle(fontSize: 13.0, color: Color(0xff7B7980)),
             ),
-            const Spacer(),
-            badges.Badge(
-              showBadge: is_logged_in.$,
-              position: badges.BadgePosition.topEnd(top: 0, end: 0),
-              badgeStyle: badges.BadgeStyle(
-                shape: badges.BadgeShape.circle,
-                badgeColor: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusNormal),
-                padding: const EdgeInsets.all(3),
-              ),
-              ignorePointer: true,
-              badgeContent: Consumer<UnReadNotificationCounter>(
-                builder: (context, notification, child) {
-                  return Text(
-                    "${notification.unReadNotificationCounter}",
-                    style: const TextStyle(fontSize: 9, color: Colors.white),
-                  );
-                },
-              ),
-              child: GestureDetector(
-                onTap: is_logged_in.$
-                    ? () {
-                        Navigator.push(context,
-                            PageAnimation.fadeRoute(const NotificationList()));
-                      }
-                    : () {
-                        ToastComponent.showDialog(
-                          'you_need_to_log_in'.tr(context: context),
-                          isError: true,
-                        );
-                      },
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Image.asset(
-                    AppImages.notification,
-                    height: 18,
-                    color: is_logged_in.$
-                        ? const Color(0xff7B7980)
-                        : const Color(0xff7B7980),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
