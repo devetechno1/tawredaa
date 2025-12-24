@@ -174,34 +174,64 @@ class _ProductCardBlackState extends State<ProductCardBlack> {
                     ),
                     alignment: Alignment.center,
                     child: FittedBox(
-                      child: Column(
-                        children: [
-                          Text(
-                            'off'.tr(context: context),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              height: 1.1,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
+                      
+                    child: Column(
+                      children: [
+                        Text(
+                          'off'.tr(context: context),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 9,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            height: 1.1,
                           ),
-                          Text(
-                                 AppConfig.businessSettingsData.diplayDiscountType == 'percentage' 
-                      ? "${widget.discount ?? ''}"    
-                       :"${widget.flatdiscount} ${SystemConfig.systemCurrency!.symbol}",
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              height: 1.1,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
+                          
+                        ),
+                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
+                        Column(
+                          children: [
+                            Text(
+                              "${widget.flatdiscount}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                                        Text(
+                              "${SystemConfig.systemCurrency!.symbol}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                          ],
+                        ),
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
+            Text(
+              "${widget.discount}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 9,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                height: 1.1,
+              ),
+            ),
+          ],
+        ),
                     ),
         ),
 

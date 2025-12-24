@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:active_ecommerce_cms_demo_app/app_config.dart';
 import 'package:active_ecommerce_cms_demo_app/data_model/business_setting_response.dart';
@@ -32,6 +33,11 @@ class BusinessSettingRepository {
     final response = await ApiRequest.get(url: url, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'device_type': Platform.isAndroid
+    ? 'android'
+    : Platform.isIOS
+        ? 'ios'
+        : 'other',
       if (user_id.$ != null && is_logged_in.$) 'user_id': user_id.$.toString(),
       // 'device_info': jsonEncode(AppConfig.deviceInfo),
     });

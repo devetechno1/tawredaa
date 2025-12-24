@@ -58,6 +58,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
             has_discount: product.has_discount!,
             discount: product.discount,
             isWholesale: product.isWholesale,
+            flatdiscount: product.flatdiscount,
           );
         },
         loadingItemBuilder: (_, index) {

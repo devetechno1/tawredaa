@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:active_ecommerce_cms_demo_app/middlewares/auth_middleware.dart';
 import 'package:active_ecommerce_cms_demo_app/screens/auth/login.dart';
@@ -91,6 +92,7 @@ void main() async {
   } else {
     await appRunner();
   }
+  
 }
 
 late final Address? _initAddress;

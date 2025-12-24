@@ -2416,76 +2416,44 @@ class _ProductDetailsState extends State<ProductDetails>
       children: [
         Column(
           children: [
-             Visibility(
-          visible: _productDetails!.has_discount!,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: AppDimensions.paddingSmall),
-            child: Text(
-                SystemConfig.systemCurrency != null
-                    ? _productDetails!.stroked_price!.replaceAll(
-                        SystemConfig.systemCurrency!.code!,
-                        SystemConfig.systemCurrency!.symbol!)
-                    : _productDetails!.stroked_price!,
-                style: const TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  color: Color(0xffA8AFB3),
-                  fontFamily: 'Public Sans',
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.normal,
-                )),
-          ),
-        ),
-            AnimatedNumberText<double>(
-              _basePrice,
-              duration: const Duration(
-                  milliseconds: AppDimensions.animationDefaultInMillis),
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontFamily: 'Public Sans',
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+            Visibility(
+              visible: _productDetails!.has_discount!,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(bottom: AppDimensions.paddingSmall),
+                child: Text(
+                    SystemConfig.systemCurrency != null
+                        ? _productDetails!.stroked_price!.replaceAll(
+                            SystemConfig.systemCurrency!.code!,
+                            SystemConfig.systemCurrency!.symbol!)
+                        : _productDetails!.stroked_price!,
+                    style: const TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      color: Color(0xffA8AFB3),
+                      fontFamily: 'Public Sans',
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.normal,
+                    )),
               ),
-              formatter: (value) {
-                return '${value.toStringAsFixed(2)} ${SystemConfig.systemCurrency?.symbol ?? ''}'
-                    .trim();
-              },
             ),
-            
-          ],
-        ),
-        // Visibility(
-        //   visible: _productDetails!.has_discount!,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(bottom: AppDimensions.paddingSmall),
-        //     child: Text(
-        //         SystemConfig.systemCurrency != null
-        //             ? _productDetails!.stroked_price!.replaceAll(
-        //                 SystemConfig.systemCurrency!.code!,
-        //                 SystemConfig.systemCurrency!.symbol!)
-        //             : _productDetails!.stroked_price!,
-        //         style: const TextStyle(
-        //           decoration: TextDecoration.lineThrough,
-        //           color: Color(0xffA8AFB3),
-        //           fontFamily: 'Public Sans',
-        //           fontSize: 12.0,
-        //           fontWeight: FontWeight.normal,
-        //         )),
-        //   ),
-        // ),
-        // Visibility(
-        //   visible: _productDetails!.has_discount!,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(bottom: AppDimensions.paddingSmall),
-        //     child: Text(
-        //       AppConfig.businessSettingsData.diplayDiscountType == 'percentage' 
-        //               ? "${_productDetails?.discount ?? ''}"    
-        //                :"${_productDetails?.flatdiscount} ${SystemConfig.systemCurrency!.symbol}",
-        //       style: const TextStyle(
-        //           fontSize: 12, color: Colors.red, fontWeight: FontWeight.bold),
-        //     ),
-        //   ),
-        // ),
-        Text(
+            Row(
+              children: [
+                AnimatedNumberText<double>(
+                  _basePrice,
+                  duration: const Duration(
+                      milliseconds: AppDimensions.animationDefaultInMillis),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontFamily: 'Public Sans',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  formatter: (value) {
+                    return '${value.toStringAsFixed(2)} ${SystemConfig.systemCurrency?.symbol ?? ''}'
+                        .trim();
+                  },
+                ),
+                Text(
           "/${_productDetails!.unit}",
           // _singlePriceString,
           style: TextStyle(
@@ -2493,72 +2461,92 @@ class _ProductDetailsState extends State<ProductDetails>
               fontSize: 16.0,
               fontWeight: FontWeight.w600),
         ),
+              ],
+            ),
+          ],
+        ),
+        
         const Spacer(),
-           if (_productDetails?.has_discount == true)
-               Container(
-                 height: 44,
-                 width: 44,
-                 decoration: BoxDecoration(
-                   color: Theme.of(context).primaryColor,
-                   shape: BoxShape.circle,
-                   boxShadow: const [
-                     BoxShadow(
-                       color: Color(0x14000000),
-                       offset: Offset(-1, 1),
-                       blurRadius: 1,
-                     ),
-                   ],
-                 ),
-                 alignment: Alignment.center,
-                 child: FittedBox(
-                   fit: BoxFit.scaleDown,
-                   child: Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                     child: Column(
-                       children: [
-                         Text(
-                           'off'.tr(context: context),
-                           maxLines: 1,
-                           overflow: TextOverflow.ellipsis,
-                           style: const TextStyle(
-                             fontSize: 9,
-                             color: Colors.white,
-                             fontWeight: FontWeight.w700,
-                             height: 1.1,
-                           ),
-                           
-                         ),
-                         if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
-                         Text(
-                           "${_productDetails?.flatdiscount} ${SystemConfig.systemCurrency!.symbol}",
-                           maxLines: 1,
-                           overflow: TextOverflow.ellipsis,
-                           style: const TextStyle(
-                             fontSize: 9,
-                             color: Colors.white,
-                             fontWeight: FontWeight.w700,
-                 height: 1.1,
-               ),
-               
-                           ),
-                           if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
-                           Text(
-               "${_productDetails?.discount}",
-               maxLines: 1,
-               overflow: TextOverflow.ellipsis,
-               style: const TextStyle(
-                 fontSize: 9,
-                 color: Colors.white,
-                 fontWeight: FontWeight.w700,
-                 height: 1.1,
-               ),
-                           ),
-                         ],
-                       ),
-                     ),
-                   ),
-                 ),
-],
+        if (_productDetails?.has_discount == true)
+          Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              shape: BoxShape.circle,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  offset: Offset(-1, 1),
+                  blurRadius: 1,
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Column(
+                  children: [
+                    Text(
+                      'off'.tr(context: context),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        height: 1.1,
+                      ),
+                    ),
+                    if (AppConfig.businessSettingsData.diplayDiscountType ==
+                        'flat')
+                      Column(
+                        children: [
+                          Text(
+                            "${_productDetails?.flatdiscount}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              height: 1.1,
+                            ),
+                          ),
+                          Text(
+                            "${SystemConfig.systemCurrency!.symbol}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              height: 1.1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    if (AppConfig.businessSettingsData.diplayDiscountType ==
+                        'percentage')
+                      Text(
+                        "${_productDetails?.discount}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          height: 1.1,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -2831,46 +2819,46 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   int errorsTimes = 0;
-int _heightTries = 0;
-bool _heightInProgress = false;
- Future<void> getDescriptionHeight() async {
-  if (!mounted) return;
-  if (_heightInProgress) return;
+  int _heightTries = 0;
+  bool _heightInProgress = false;
+  Future<void> getDescriptionHeight() async {
+    if (!mounted) return;
+    if (_heightInProgress) return;
 
-  _heightInProgress = true;
+    _heightInProgress = true;
 
-  try {
-    while (mounted && _heightTries < 6) {
-      _heightTries++;
+    try {
+      while (mounted && _heightTries < 6) {
+        _heightTries++;
 
-      // سيب وقت للـ webview يرندر
-      await Future.delayed(const Duration(milliseconds: 150));
+        // سيب وقت للـ webview يرندر
+        await Future.delayed(const Duration(milliseconds: 150));
 
-      final res = await controller.runJavaScriptReturningResult(
-        "document.getElementById('scaled-frame')?.clientHeight ?? 0",
-      );
+        final res = await controller.runJavaScriptReturningResult(
+          "document.getElementById('scaled-frame')?.clientHeight ?? 0",
+        );
 
-      // الresult بيرجع كـ num أو String حسب المنصة
-      final double h = () {
-        if (res is num) return res.toDouble();
-        final s = res.toString().replaceAll('"', '').trim();
-        return double.tryParse(s) ?? 0;
-      }();
+        // الresult بيرجع كـ num أو String حسب المنصة
+        final double h = () {
+          if (res is num) return res.toDouble();
+          final s = res.toString().replaceAll('"', '').trim();
+          return double.tryParse(s) ?? 0;
+        }();
 
-      if (h > 0) {
-        webViewHeight = h;
-        _heightTries = 0;
-        if (mounted) setState(() {});
-        break;
+        if (h > 0) {
+          webViewHeight = h;
+          _heightTries = 0;
+          if (mounted) setState(() {});
+          break;
+        }
       }
+    } catch (e, st) {
+      recordError(e, st);
+      // ماتعملش recursion
+    } finally {
+      _heightInProgress = false;
     }
-  } catch (e, st) {
-    recordError(e, st);
-    // ماتعملش recursion
-  } finally {
-    _heightInProgress = false;
   }
-}
 
   Widget buildTopSellingProductList() {
     if (_topProductInit == false && _topProducts.isEmpty) {
@@ -2903,14 +2891,15 @@ bool _heightInProgress = false;
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return TopSellingProductsCard(
-              id: _topProducts[index].id,
-              slug: _topProducts[index].slug,
-              image: _topProducts[index].thumbnail_image,
-              name: _topProducts[index].name,
-              main_price: _topProducts[index].main_price,
-              stroked_price: _topProducts[index].stroked_price,
-              has_discount: _topProducts[index].has_discount,
-              flatdiscount: _topProducts[index].flatdiscount,);
+            id: _topProducts[index].id,
+            slug: _topProducts[index].slug,
+            image: _topProducts[index].thumbnail_image,
+            name: _topProducts[index].name,
+            main_price: _topProducts[index].main_price,
+            stroked_price: _topProducts[index].stroked_price,
+            has_discount: _topProducts[index].has_discount,
+            flatdiscount: _topProducts[index].flatdiscount,
+          );
         },
       );
     } else {
@@ -2949,15 +2938,16 @@ bool _heightInProgress = false;
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               return MiniProductCard(
-                  id: _relatedProducts[index].id,
-                  slug: _relatedProducts[index].slug,
-                  image: _relatedProducts[index].thumbnail_image,
-                  name: _relatedProducts[index].name,
-                  main_price: _relatedProducts[index].main_price,
-                  stroked_price: _relatedProducts[index].stroked_price,
-                  isWholesale: _relatedProducts[index].isWholesale,
-                  has_discount: _relatedProducts[index].has_discount,
-                  flatdiscount: _relatedProducts[index].flatdiscount,);
+                id: _relatedProducts[index].id,
+                slug: _relatedProducts[index].slug,
+                image: _relatedProducts[index].thumbnail_image,
+                name: _relatedProducts[index].name,
+                main_price: _relatedProducts[index].main_price,
+                stroked_price: _relatedProducts[index].stroked_price,
+                isWholesale: _relatedProducts[index].isWholesale,
+                has_discount: _relatedProducts[index].has_discount,
+                flatdiscount: _relatedProducts[index].flatdiscount,
+              );
             },
           ),
         ),

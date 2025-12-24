@@ -113,18 +113,34 @@ class _MiniProductCardState extends State<MiniProductCard> {
                           
                         ),
                         if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
-                        Text(
-                          "${widget.flatdiscount} ${SystemConfig.systemCurrency!.symbol}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 9,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                height: 1.1,
-              ),
-              
-            ),
+                        Column(
+                          children: [
+                            Text(
+                              "${widget.flatdiscount}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                                        Text(
+                              "${SystemConfig.systemCurrency!.symbol}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                          ],
+                        ),
             if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
             Text(
               "${widget.discount}",

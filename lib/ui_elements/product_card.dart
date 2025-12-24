@@ -182,7 +182,7 @@ class _ProductCardState extends State<ProductCard> {
                           maxLines: 1,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
-                            fontSize: 13,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -194,16 +194,16 @@ class _ProductCardState extends State<ProductCard> {
             ),
             if(widget.has_discount)
             Positioned.fill(
-  child: Align(
-    alignment: Alignment.topRight,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        if (widget.has_discount)
-          Container(
-            height: 44,
-            width: 44,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (widget.has_discount)
+                      Container(
+                        height: 44,
+                        width: 44,
             margin: const EdgeInsets.only(
               top: AppDimensions.paddingSmall,
               right: AppDimensions.paddingSmall,
@@ -225,10 +225,11 @@ class _ProductCardState extends State<ProductCard> {
               fit: BoxFit.scaleDown,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Column(
-                  children: [
-                      Text(
-                          "off".tr(context: context),
+       
+                    child: Column(
+                      children: [
+                        Text(
+                          'off'.tr(context: context),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -239,25 +240,49 @@ class _ProductCardState extends State<ProductCard> {
                           ),
                           
                         ),
-                    Text(
-                      AppConfig.businessSettingsData.diplayDiscountType == 'percentage' 
-                      ? "${widget.discount ?? ''}"    
-                       :"${widget.flatdiscount} ${SystemConfig.systemCurrency!.symbol}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        height: 1.1,
-                      ),
-                      textHeightBehavior: const TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                      ),
-                      softWrap: false,
-                    ),
-                  ],
-                ),
+                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
+                        Column(
+                          children: [
+                            Text(
+                              "${widget.flatdiscount}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                                        Text(
+                              "${SystemConfig.systemCurrency!.symbol}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                            height: 1.1,
+                                          ),
+                                          
+                                        ),
+                          ],
+                        ),
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
+            Text(
+              "${widget.discount}",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 9,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                height: 1.1,
+              ),
+            ),
+          ],
+        ),
               ),
             ),
           ),
