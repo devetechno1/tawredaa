@@ -26,7 +26,7 @@ class MetroScreen extends StatelessWidget {
         const CarouselAndFlashSaleSliver(isFlashSaleCircle: true),
         // Featured category (FIX)
         buildFeaturedCategory(context),
-
+        const BrandListSectionSliver(),
         const SliverToBoxAdapter(child: HomeBannersOne()),
         const DiscountProductSectionSliver(),
         const SliverToBoxAdapter(child: HomeBannersTwo()),
@@ -35,7 +35,6 @@ class MetroScreen extends StatelessWidget {
           title: 'todays_deal_ucf'.tr(context: context),
         ),
         const SliverToBoxAdapter(child: HomeBannersThree()),
-        const BrandListSectionSliver(),
         const SliverToBoxAdapter(child: HomeBannersFour()),
         const FeaturedProductsListSliver(),
         const AuctionProductsSectionSliver(),
