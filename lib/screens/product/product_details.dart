@@ -2529,7 +2529,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         ],
                       ),
                     if (AppConfig.businessSettingsData.diplayDiscountType ==
-                        'percentage')
+                        'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
                       Text(
                         "${_productDetails?.discount}",
                         maxLines: 1,

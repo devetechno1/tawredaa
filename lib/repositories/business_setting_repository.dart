@@ -33,7 +33,7 @@ class BusinessSettingRepository {
     final response = await ApiRequest.get(url: url, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'device_type': Platform.isAndroid
+      'Device-type': Platform.isAndroid
     ? 'android'
     : Platform.isIOS
         ? 'ios'
