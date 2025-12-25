@@ -267,6 +267,8 @@ debugPrint('has flat_discount key? ${body.contains('"flat_discount"')}');
       "Authorization": "Bearer ${access_token.$}",
       "Content-Type": "application/json"
     });
+    final body = response.body;
+debugPrint('has flat_discount key2? ${body.contains('"flat_discount"')}');  
 
     return productMiniResponseFromJson(response.body);
   }
