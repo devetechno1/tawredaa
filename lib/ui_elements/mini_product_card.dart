@@ -141,7 +141,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
                                         ),
                           ],
                         ),
-            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
             Text(
               "${widget.discount}",
               maxLines: 1,

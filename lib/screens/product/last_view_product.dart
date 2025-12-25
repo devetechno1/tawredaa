@@ -110,6 +110,7 @@ class _LastViewProductState extends State<LastViewProduct> {
               has_discount: _lastViewProducts[index].has_discount,
               discount: _lastViewProducts[index].discount,
               isWholesale: _lastViewProducts[index].isWholesale,
+              flatdiscount: _lastViewProducts[index].flatdiscount,
             );
           },
         ),

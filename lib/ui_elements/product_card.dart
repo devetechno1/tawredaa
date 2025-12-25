@@ -269,7 +269,7 @@ class _ProductCardState extends State<ProductCard> {
                                         ),
                           ],
                         ),
-            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage')
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
             Text(
               "${widget.discount}",
               maxLines: 1,
