@@ -112,7 +112,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
                           ),
                           
                         ),
-                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
+                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat'&& widget.flatdiscount != null) 
                         Column(
                           children: [
                             Text(
@@ -141,7 +141,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
                                         ),
                           ],
                         ),
-            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| widget.flatdiscount == null)
             Text(
               "${widget.discount}",
               maxLines: 1,

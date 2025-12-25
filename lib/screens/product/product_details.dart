@@ -2501,7 +2501,7 @@ class _ProductDetailsState extends State<ProductDetails>
                       ),
                     ),
                     if (AppConfig.businessSettingsData.diplayDiscountType ==
-                        'flat')
+                        'flat'&& _productDetails?.flatdiscount != null)
                       Column(
                         children: [
                           Text(
@@ -2529,7 +2529,7 @@ class _ProductDetailsState extends State<ProductDetails>
                         ],
                       ),
                     if (AppConfig.businessSettingsData.diplayDiscountType ==
-                        'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
+                        'percentage'|| _productDetails?.flatdiscount == null)
                       Text(
                         "${_productDetails?.discount}",
                         maxLines: 1,

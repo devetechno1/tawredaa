@@ -240,7 +240,7 @@ class _ProductCardState extends State<ProductCard> {
                           ),
                           
                         ),
-                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat') 
+                        if (AppConfig.businessSettingsData.diplayDiscountType == 'flat'&& widget.flatdiscount != null) 
                         Column(
                           children: [
                             Text(
@@ -269,7 +269,7 @@ class _ProductCardState extends State<ProductCard> {
                                         ),
                           ],
                         ),
-            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| AppConfig.businessSettingsData.diplayDiscountType == null)
+            if (AppConfig.businessSettingsData.diplayDiscountType == 'percentage'|| widget.flatdiscount == null)
             Text(
               "${widget.discount}",
               maxLines: 1,
